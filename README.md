@@ -18,6 +18,6 @@ proto-gen-swiftapiclient -i proto/ api/v1/*.proto
 
 -	Streaming API
 	-	Not create a convert method.
--	[HttpRul](https://cloud.google.com/endpoints/docs/grpc-service-config/reference/rpc/google.api#google.api.HttpRule)
+-	[HttpRule](https://cloud.google.com/endpoints/docs/grpc-service-config/reference/rpc/google.api#google.api.HttpRule)
 -	`map` type query string
 
