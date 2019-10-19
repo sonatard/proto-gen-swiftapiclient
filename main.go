@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/jhump/protoreflect/desc/protoparse"
-	"github.com/sonatard/proto-gen-swfitapiclient/printer"
+	"github.com/sonatard/proto-gen-swiftapiclient/printer"
 	"golang.org/x/xerrors"
 )
 

@@ -1,4 +1,4 @@
-module github.com/sonatard/proto-gen-swfitapiclient
+module github.com/sonatard/proto-gen-swiftapiclient
 
 go 1.12
 

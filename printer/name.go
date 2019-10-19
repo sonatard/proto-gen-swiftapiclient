@@ -6,7 +6,7 @@ import (
 	"github.com/golang/protobuf/protoc-gen-go/descriptor"
 	"github.com/iancoleman/strcase"
 	"github.com/jhump/protoreflect/desc"
-	"github.com/sonatard/proto-gen-swfitapiclient/str"
+	"github.com/sonatard/proto-gen-swiftapiclient/str"
 )
 
 func valueName(field *desc.FieldDescriptor) string {
