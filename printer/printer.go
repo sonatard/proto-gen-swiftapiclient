@@ -58,11 +58,11 @@ example
 	}
 */
 func printMethod(packageName string, service *desc.ServiceDescriptor, method *desc.MethodDescriptor) {
-	fmt.Printf("\tstruct %v: AppRequest {\n", method.GetName())
+	fmt.Printf("    struct %v: AppRequest {\n", method.GetName())
 	fmt.Printf("\n")
-	fmt.Printf("\t\ttypealias Request = %v\n", method.GetInputType().GetName())
+	fmt.Printf("        typealias Request = %v\n", method.GetInputType().GetName())
 	fmt.Printf("\n")
-	fmt.Printf("\t\ttypealias Response = %v\n", method.GetOutputType().GetName())
+	fmt.Printf("        typealias Response = %v\n", method.GetOutputType().GetName())
 
 	fields := method.GetInputType().GetFields()
 	if len(fields) > 0 {
@@ -71,13 +71,13 @@ func printMethod(packageName string, service *desc.ServiceDescriptor, method *de
 	printProperties(packageName, fields)
 	fmt.Printf("\n")
 
-	fmt.Printf("\t\tvar method: String {\n")
-	fmt.Printf("\t\t\treturn \"%v/%v\"\n", service.GetName(), method.GetName())
-	fmt.Printf("\t\t}\n")
+	fmt.Printf("        var method: String {\n")
+	fmt.Printf("            return \"%v/%v\"\n", service.GetName(), method.GetName())
+	fmt.Printf("        }\n")
 	fmt.Printf("\n")
 
 	printRequestParameters(fields)
-	fmt.Printf("\t}\n")
+	fmt.Printf("    }\n")
 }
 
 /*
@@ -87,7 +87,7 @@ example
 */
 func printProperties(packageName string, fields []*desc.FieldDescriptor) {
 	for _, field := range fields {
-		fmt.Printf("\t\tlet %v: %v\n", valueName(field), typeName(packageName, field))
+		fmt.Printf("        let %v: %v\n", valueName(field), typeName(packageName, field))
 	}
 }
 
@@ -100,19 +100,19 @@ func printProperties(packageName string, fields []*desc.FieldDescriptor) {
 	}
 */
 func printRequestParameters(fields []*desc.FieldDescriptor) {
-	fmt.Printf("\t\tvar input: Request {\n")
+	fmt.Printf("        var input: Request {\n")
 
 	if len(fields) == 0 {
-		fmt.Printf("\t\t\treturn Request()\n")
+		fmt.Printf("            return Request()\n")
 	} else {
-		fmt.Printf("\t\t\treturn Request.with {\n")
+		fmt.Printf("            return Request.with {\n")
 
 		for _, field := range fields {
 			valueName := valueName(field)
-			fmt.Printf("\t\t\t\t$0.%v = %v\n", valueName, valueName)
+			fmt.Printf("                $0.%v = %v\n", valueName, valueName)
 		}
-		fmt.Printf("\t\t\t}\n")
+		fmt.Printf("            }\n")
 	}
 
-	fmt.Printf("\t\t}\n")
+	fmt.Printf("        }\n")
 }
