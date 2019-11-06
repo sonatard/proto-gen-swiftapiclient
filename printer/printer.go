@@ -2,6 +2,7 @@ package printer
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/jhump/protoreflect/desc"
 )
@@ -10,7 +11,7 @@ import (
 example
 import Foundation
 
-enum UserService {
+public enum UserService {
 		// exec following function
 		printMethod(packageName, service, method)
 }
@@ -26,7 +27,7 @@ func Print(files []*desc.FileDescriptor) {
 		}
 
 		for _, service := range services {
-			fmt.Printf("enum %v {\n", service.GetName())
+			fmt.Printf("public enum %v {\n", service.GetName())
 
 			for _, method := range service.GetMethods() {
 				fmt.Printf("\n")
@@ -40,16 +41,16 @@ func Print(files []*desc.FileDescriptor) {
 
 /*
 example
-	struct CreateDoctor: AppRequest {
+	public struct CreateDoctor: AppRequest {
 
-		typealias Request = CreateUserRequest
+		public typealias Request = CreateUserRequest
 
-		typealias Response = CreateUserResponse
+		public typealias Response = CreateUserResponse
 
 		// exec following function
 		printProperties(packageName, fields)
 
-		var method: String {
+		public var method: String {
 			return "UserService/CreateUser"
 		}
 
@@ -58,11 +59,11 @@ example
 	}
 */
 func printMethod(packageName string, service *desc.ServiceDescriptor, method *desc.MethodDescriptor) {
-	fmt.Printf("    struct %v: AppRequest {\n", method.GetName())
+	fmt.Printf("    public struct %v: AppRequest {\n", method.GetName())
 	fmt.Printf("\n")
-	fmt.Printf("        typealias Request = %v\n", method.GetInputType().GetName())
+	fmt.Printf("        public typealias Request = %v\n", method.GetInputType().GetName())
 	fmt.Printf("\n")
-	fmt.Printf("        typealias Response = %v\n", method.GetOutputType().GetName())
+	fmt.Printf("        public typealias Response = %v\n", method.GetOutputType().GetName())
 
 	fields := method.GetInputType().GetFields()
 	if len(fields) > 0 {
@@ -70,8 +71,10 @@ func printMethod(packageName string, service *desc.ServiceDescriptor, method *de
 	}
 	printProperties(packageName, fields)
 	fmt.Printf("\n")
+	printInit(packageName, fields)
+	fmt.Printf("\n")
 
-	fmt.Printf("        var method: String {\n")
+	fmt.Printf("        public var method: String {\n")
 	fmt.Printf("            return \"%v/%v\"\n", service.GetName(), method.GetName())
 	fmt.Printf("        }\n")
 	fmt.Printf("\n")
@@ -87,12 +90,33 @@ example
 */
 func printProperties(packageName string, fields []*desc.FieldDescriptor) {
 	for _, field := range fields {
-		fmt.Printf("        let %v: %v\n", valueName(field), typeName(packageName, field))
+		fmt.Printf("        public let %v: %v\n", valueName(field), typeName(packageName, field))
 	}
 }
 
 /*
-	var input: Request {
+example
+    public init(name: String, age: Int64) {
+        self.name = name
+		self.age = age
+    }
+*/
+func printInit(packageName string, fields []*desc.FieldDescriptor) {
+	init := "        public init("
+	for _, field := range fields {
+		init += fmt.Sprintf("%v: %v, ", valueName(field), typeName(packageName, field))
+	}
+	init = strings.TrimSuffix(init, ", ")
+	init += ") {\n"
+	for _, field := range fields {
+		init += fmt.Sprintf("            self.%v = %v\n", valueName(field), valueName(field))
+	}
+	init += "        }"
+	fmt.Println(init)
+}
+
+/*
+	public var input: Request {
 		return Request.with {
 			$0.name = name
 			$0.age = age
@@ -100,7 +124,7 @@ func printProperties(packageName string, fields []*desc.FieldDescriptor) {
 	}
 */
 func printRequestParameters(fields []*desc.FieldDescriptor) {
-	fmt.Printf("        var input: Request {\n")
+	fmt.Printf("        public var input: Request {\n")
 
 	if len(fields) == 0 {
 		fmt.Printf("            return Request()\n")
