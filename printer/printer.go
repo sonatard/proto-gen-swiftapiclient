@@ -10,6 +10,7 @@ import (
 /*
 example
 import Foundation
+import Entity
 
 public enum UserService {
 		// exec following function
@@ -18,6 +19,7 @@ public enum UserService {
 */
 func Print(files []*desc.FileDescriptor) {
 	fmt.Printf("import Foundation\n")
+	fmt.Printf("import Entity\n")
 	for _, file := range files {
 		packageName := file.GetPackage()
 		services := file.GetServices()
@@ -41,7 +43,7 @@ func Print(files []*desc.FileDescriptor) {
 
 /*
 example
-	public struct CreateDoctor: AppRequest {
+	public struct CreateDoctor: ProtoRequest {
 
 		public typealias Request = CreateUserRequest
 
@@ -59,7 +61,7 @@ example
 	}
 */
 func printMethod(packageName string, service *desc.ServiceDescriptor, method *desc.MethodDescriptor) {
-	fmt.Printf("    public struct %v: AppRequest {\n", method.GetName())
+	fmt.Printf("    public struct %v: ProtoRequest {\n", method.GetName())
 	fmt.Printf("\n")
 	fmt.Printf("        public typealias Request = %v\n", method.GetInputType().GetName())
 	fmt.Printf("\n")
