@@ -9,8 +9,8 @@ import (
 
 /*
 example
-import Foundation
 import Entity
+import Foundation
 
 public enum UserService {
 		// exec following function
@@ -18,8 +18,8 @@ public enum UserService {
 }
 */
 func Print(files []*desc.FileDescriptor) {
-	fmt.Printf("import Foundation\n")
 	fmt.Printf("import Entity\n")
+	fmt.Printf("import Foundation\n")
 	for _, file := range files {
 		packageName := file.GetPackage()
 		services := file.GetServices()
