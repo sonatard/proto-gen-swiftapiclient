@@ -33,7 +33,20 @@ func Print(files []*desc.FileDescriptor) {
 
 			for _, method := range service.GetMethods() {
 				fmt.Printf("\n")
-				printMethod(packageName, service, method)
+				httpRule, err := httpRule(method)
+				if err != nil {
+					fmt.Println(err)
+					fmt.Printf("skip service: %v, method: %v\n", service.GetName(), method.GetName())
+					continue
+				}
+				endpoint, err := newEndpoint(httpRule)
+				if err != nil {
+					fmt.Println(err)
+					fmt.Printf("skip service: %v, method: %v\n", service.GetName(), method.GetName())
+					continue
+				}
+
+				printMethod(packageName, service, method, endpoint)
 			}
 
 			fmt.Printf("}\n")
@@ -60,7 +73,7 @@ example
 		printRequestParameters(fields)
 	}
 */
-func printMethod(packageName string, service *desc.ServiceDescriptor, method *desc.MethodDescriptor) {
+func printMethod(packageName string, service *desc.ServiceDescriptor, method *desc.MethodDescriptor, endpoint *endpoint) {
 	fmt.Printf("    public struct %v: ProtoRequest {\n", method.GetName())
 	fmt.Printf("\n")
 	fmt.Printf("        public typealias Request = %v\n", method.GetInputType().GetName())
@@ -77,7 +90,7 @@ func printMethod(packageName string, service *desc.ServiceDescriptor, method *de
 	fmt.Printf("\n")
 
 	fmt.Printf("        public var method: String {\n")
-	fmt.Printf("            return \"%v/%v\"\n", service.GetName(), method.GetName())
+	fmt.Printf("            return \"%v\"\n", endpoint.path)
 	fmt.Printf("        }\n")
 	fmt.Printf("\n")
 
