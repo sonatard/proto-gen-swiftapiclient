@@ -18,7 +18,7 @@ public enum UserService {
 }
 */
 func Print(files []*desc.FileDescriptor) {
-	fmt.Printf("import Entity\n")
+	fmt.Printf("import Environment\n")
 	fmt.Printf("import Foundation\n")
 	for _, file := range files {
 		packageName := file.GetPackage()
